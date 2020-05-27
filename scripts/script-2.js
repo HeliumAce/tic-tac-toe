@@ -1,7 +1,7 @@
 //////// PLAYER OBJECT ////////
 const Player = (name) => {
     let playerName = name.value;
-    const youWon = () => `Congrats, ${playerName}! You won the game!`;
+    const youWon = () => `Congrats, ${playerName}, you won the game!`;
     return { youWon, playerName };
 }
 
