@@ -2,7 +2,7 @@
 const Player = (name) => {
     let playerName = name.value;
     const youWon = () => `Congrats, ${playerName}! You won the game!`;
-    return {youWon};
+    return { youWon, playerName };
 }
 
 //////// BASIC SETUP ////////
@@ -25,10 +25,17 @@ const gameBoard = (() => {
     //bind to DOM
     const startButton = document.getElementById('startGame');
     const loadGameModal = document.getElementById('loadGame');
+    let namePlayer1 = document.getElementById('namePlayer1');
+    let namePlayer2 = document.getElementById('namePlayer2');
+    let turnPlayer1 = document.getElementById('turnPlayer1');
+    let turnPlayer2 = document.getElementById('turnPlayer2');
+    let gameInfo = document.getElementById('gameInfo');
 
     //start first game
     startButton.addEventListener('click', (e) = () => {
         getPlayerNames();
+        setPlayerNames();
+        setPlayerTurn();
         startGame();
     });
     
@@ -70,6 +77,7 @@ const gameBoard = (() => {
             let renderSquare = document.getElementById(i);
             renderSquare.innerHTML = gameArray[i].marker;           
         }
+        setPlayerTurn();
         gameLogic.checkForWin();
     }
 
@@ -83,6 +91,28 @@ const gameBoard = (() => {
         render();
     }
 
+    //set player names
+    const setPlayerNames = () => {
+        namePlayer1.innerHTML = player1.value;
+        namePlayer2.innerHTML = player2.value;
+        gameInfo.style.display = 'block';
+    };
+
+    //display player turn
+    const setPlayerTurn = () => {
+        if (currentPlayer === 1) {
+            infoPlayer1.style.backgroundColor = '#FFF731';
+            infoPlayer2.style.backgroundColor = '#DBE7E6';
+            turnPlayer1.innerHTML = 'It\'s your turn!'
+            turnPlayer2.innerHTML = ''
+        } if (currentPlayer === 2) {
+            infoPlayer2.style.backgroundColor = '#FFF731';
+            infoPlayer1.style.backgroundColor = '#DBE7E6';
+            turnPlayer2.innerHTML = 'It\'s your turn!'
+            turnPlayer1.innerHTML = ''
+        }
+    }
+
     return { gameArray, newGame };
 
 })();
@@ -93,6 +123,9 @@ const gameLogic = (() => {
     let sq = gameBoard.gameArray;
     let gameOver = document.getElementById('gameOver');
     let gameOverMessage = document.getElementById('gameOverMessage');
+    let winsPlayer1 = document.getElementById('winsPlayer1');
+    let Player1Wins = 0;
+    let Player2Wins = 0;
 
     //winning combos sum function
     const sum = (x, y, z) => {
@@ -120,12 +153,15 @@ const gameLogic = (() => {
             if (winningCombos[i] === 3) {;
                 gameOver.style.display = 'block';
                 gameOverMessage.innerHTML = `${Player(player1).youWon()}`
+                Player1Wins += 1;
             } else if (winningCombos[i] === 6) {
                 gameOver.style.display = 'block';
                 gameOverMessage.innerHTML = `${Player(player2).youWon()}`
+                Player2Wins += 1;
             }
         }
         checkForTie();
+        updateTotalWins();
     }
 
     //if no winner when all squares are marked
@@ -141,6 +177,10 @@ const gameLogic = (() => {
             gameOverMessage.innerHTML = 'Tie game';
         }
     };
+
+    const updateTotalWins = () => {
+
+    }
     
     //play again modal
     const playAgainButton = document.getElementById('playAgain');

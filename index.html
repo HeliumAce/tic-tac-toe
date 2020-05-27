@@ -3,42 +3,65 @@
 <head>
   <title>Tic Tac Toe</title>
   <meta charset='UTF-8'/>
-  <link rel='stylesheet' href='styles/main.css'>
   <link rel='stylesheet' href='styles/reset.css'>
+  <link rel='stylesheet' href='styles/main.css'>
+  <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
 
 </head>
 <body>
-  <div id = gameBoard>
-    <div class = square id = 0 data-pos = '0'></div>
-    <div class = square id = 1 data-pos = '1'></div>
-    <div class = square id = 2 data-pos = '2'></div>
-    <div class = square id = 3 data-pos = '3'></div>
-    <div class = square id = 4 data-pos = '4'></div>
-    <div class = square id = 5 data-pos = '5'></div>
-    <div class = square id = 6 data-pos = '6'></div>
-    <div class = square id = 7 data-pos = '7'></div>
-    <div class = square id = 8 data-pos = '8'></div>
+
+<header>TIC TAC TOE</header>
+
+<main>
+  <div id='gameBoard'>
+    <div class='square' id='0' ></div>
+    <div class='square' id='1' ></div>
+    <div class='square' id='2' ></div>
+    <div class='square' id='3' ></div>
+    <div class='square' id='4' ></div>
+    <div class='square' id='5' ></div>
+    <div class='square' id='6' ></div>
+    <div class='square' id='7' ></div>
+    <div class='square' id='8' ></div>
   </div>
 
-  <div id = 'loadGame' class='modal'>
-    <div class = 'modalContent'>
-      <div id = 'startGameMessage'>TIC TAC TOE</div>
-      <form action="/action_page.php">
-        <label for="player1">Player 1:</label><br>
-        <input type="text" id="player1" name="player1" value=""><br>
-        <label for="player2">Player 2:</label><br>
-        <input type="text" id="player2" name="player2" value=""><br>
+  <div id='loadGame' class='modal'>
+    <div class='modalContent'>
+      <div id='startGameMessage' class='modalHeader'>TIC TAC TOE</div>
+      <form action='/action_page.php'>
+        <label for='player1'>Player 1:</label><br>
+        <input type='text' id='player1' name='player1' value='' placeholder="Player 1 name"><br>
+        <label for='player2'>Player 2:</label><br>
+        <input type='text' id='player2' name='player2' value='' placeholder="Player 1 name"><br>
       </form> 
-      <button id = startGame>Start game</button>  
+      <button id='startGame' class='modalButton'>Start game</button>  
     </div>
   </div>
 
-  <div id = 'gameOver' class='modal'>
-    <div class = 'modalContent'>
-    <div id = 'gameOverMessage'>GAME OVER</div>
-    <button id = playAgain>Play again</button>  
+  <div id='gameOver' class='modal'>
+    <div class='modalContent'>
+    <div id='gameOverMessage' class='modalHeader'></div>
+    <button id='playAgain' class='modalButton'>Play again</button>  
   </div>
   </div>
+</main>
+
+<section id='gameInfo'>
+  <div id='cardGrid'>
+  <div id='infoPlayer1' class='playerCard'>
+    <p id='namePlayer1' class='playerName'>Player Name</p>
+    <p id='winsPlayer1' class='playerWins'>Total wins: </p>
+    <p id='turnPlayer1' class='playerTurn'>It's your turn!</p>
+    <p id='markerPlayer1' class='playerMarker'>X</p>
+  </div>
+  <div id='infoPlayer2' class='playerCard'>
+    <p id='namePlayer2' class='playerName'>>Player Name</p>
+    <p id='winsPlayer1' class='playerWins'>Total wins: </p>
+    <p id='turnPlayer2' class='playerTurn'>It's your turn!</p>
+    <p id='markerPlayer2' class='playerMarker'>O</p>
+  </div>
+  </div>
+</section>
 
 </body>
 

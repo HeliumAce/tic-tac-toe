@@ -1,14 +1,35 @@
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 10% 40% 1fr;
+}
+
+header {
+    align-self: center;
+    justify-self: center;
+    font-size: 52px;
+    margin-top: 32px; 
+}
+
+main {
+    align-self: center;
+    justify-self: center;
+}
+
 #gameBoard {
     display: grid;
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
     justify-items: stretch;
     align-items: stretch;
+    border: 1px solid #223344;
 }
 
 .square {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 32px;
+    font-family: 'Acme', sans-serif;
+    font-size: 48px;
+    font-weight: 600;
     line-height: 150px;
     text-align: center;
     border: 1px solid #223344;
@@ -31,14 +52,99 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
   }
+
+.modalHeader {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+input {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    width: 80%;
+}
+
+.modalButton {
+    margin-top: 16px;
+    padding: 8px 16px;
+    background: #DBE7E6;
+    border: solid .2px #CFF9F6;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
   
 .modalContent {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 30% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 40%;
+}
+
+#gameInfo {
+    justify-self: center;
+    display: none;
+}
+
+#cardGrid {
+    justify-self: center;
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 1fr repeat(2, 225px) 1fr;
+}
+
+
+.playerCard {
+    background-color: lightblue;
+    padding: 12px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-rows: 45% 35% 20%;
+    grid-template-columns: 70% 30%;
+}
+
+#infoPlayer1 {
+    grid-column: 2 / span 1;
+}
+
+#infoPlayer2 {
+    grid-column: 3 / span 1;
+}
+
+.playerName {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.playerTurn {
+    grid-column: 1 / span 1;
+    grid-row: 3 / span 1;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.playerWins {
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.playerMarker {
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 2;
+    background-color: white;
+    border-radius: 4px;
+    font-family: 'Acme', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    align-self: stretch;
+    justify-self: stretch;
+    text-align: center;
+    padding-top: 4px;
 }
