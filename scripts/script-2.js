@@ -124,6 +124,7 @@ const gameLogic = (() => {
     let gameOver = document.getElementById('gameOver');
     let gameOverMessage = document.getElementById('gameOverMessage');
     let winsPlayer1 = document.getElementById('winsPlayer1');
+    let winsPlayer2 = document.getElementById('winsPlayer2');
     let Player1Wins = 0;
     let Player2Wins = 0;
 
@@ -179,7 +180,8 @@ const gameLogic = (() => {
     };
 
     const updateTotalWins = () => {
-
+        winsPlayer1.innerHTML = `Total wins: ${Player1Wins}`; 
+        winsPlayer2.innerHTML = `Total wins: ${Player2Wins}`;
     }
     
     //play again modal
