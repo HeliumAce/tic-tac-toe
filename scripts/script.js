@@ -1,77 +1,132 @@
-//REPLACE WITH PLAYER OBJECT
+//////// PLAYER OBJECT ////////
 const Player = (name) => {
-    const playerName = name;
-    const youWon = () => console.log(`Congrats, ${playerName}! You won the game!`);
-    return {youWon};
+    let playerName = name.value;
+    const youWon = () => `Congrats, ${playerName}, you won the game!`;
+    return { youWon, playerName };
 }
-
-const player1 = Player('Joni');
-const player2 = Player('Andrea');
-let currentPlayer = 1;
 
 //////// BASIC SETUP ////////
 const gameBoard = (() => {
+
+    let gameArray = [
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''},
+        {'marker': '', 'value': ''}
+    ]
     
-    const gameArray = ['', '', '', '', '', '', '', '', ''];
+    let currentPlayer = 1;
+    
+    //bind to DOM
+    const startButton = document.getElementById('startGame');
+    const loadGameModal = document.getElementById('loadGame');
+    let namePlayer1 = document.getElementById('namePlayer1');
+    let namePlayer2 = document.getElementById('namePlayer2');
+    let turnPlayer1 = document.getElementById('turnPlayer1');
+    let turnPlayer2 = document.getElementById('turnPlayer2');
+    let gameInfo = document.getElementById('gameInfo');
 
-    //bind game square
-    const startButton = document.getElementById('start-game');
+    //start first game
     startButton.addEventListener('click', (e) = () => {
-        onLoad();
+        getPlayerNames();
+        setPlayerNames();
+        setPlayerTurn();
+        startGame();
     });
-
-    const onLoad = () => {
+    
+    const startGame = () => {
         for (i = 0; i < gameArray.length; i++) {
-            let currentSquare = document.getElementById('square'+(i+1));
-            currentSquare.setAttribute('data-pos', i);
+            let currentSquare = document.getElementById(i);
             currentSquare.addEventListener('click', (e) = () => {
-                setArrayValue(currentSquare);
+                updateGameMarker(currentSquare);
             });
-        }       
+        }
+        loadGameModal.style.display = 'none';       
+    }
+
+    const getPlayerNames = () => {
+        const player1 = Player(document.getElementById('player1'));
+        const player2 = Player(document.getElementById('player2'));
+    }
+
+    //update marker and value on each turn
+    const updateGameMarker = (currentSquare) => {
+        if (currentSquare.innerHTML) {
+            alert('Plz choose another sqaure');
+        } else if (currentPlayer === 1) {
+            gameArray[currentSquare.id].marker = 'X';
+            gameArray[currentSquare.id].value = 1;
+            currentPlayer = 2;
+            render();
+        } else if (currentPlayer === 2) {
+            gameArray[currentSquare.id].marker = 'O';
+            gameArray[currentSquare.id].value = 2;
+            currentPlayer = 1;
+            render();
+        }
     }
     
-    //start new game
-    const startNewGame = () => {
-        currentPlayer = 1;
+    //update the game board
+    const render = () => {
         for (i = 0; i < gameArray.length; i++) {
-            let currentSquare = document.getElementById('square'+(i+1));
-            currentSquare.innerHTML = '';
-        }     
+            let renderSquare = document.getElementById(i);
+            renderSquare.innerHTML = gameArray[i].marker;           
+        }
+        setPlayerTurn();
+        gameLogic.checkForWin();
+    }
+
+    //start a new game
+    const newGame = () => {
+        for (i = 0; i < gameArray.length; i++) {
+            gameArray[i].marker = '';
+            gameArray[i].value = '';
+        }
+        currentPlayer = 1;
+        render();
+    }
+
+    //set player names
+    const setPlayerNames = () => {
+        namePlayer1.innerHTML = player1.value;
+        namePlayer2.innerHTML = player2.value;
+        gameInfo.style.display = 'block';
     };
 
-    //update array with either a 1 or a 2
-    const setArrayValue = (currentSquare) => {
-        let dataPos = currentSquare.getAttribute('data-pos');
+    //display player turn
+    const setPlayerTurn = () => {
         if (currentPlayer === 1) {
-            gameArray.splice(dataPos, 1, 1);
-            currentPlayer = 2;
-        } else {
-            gameArray.splice(dataPos, 1, 2);
-            currentPlayer = 1;
-        }
-        
-        render(dataPos, currentSquare);
-        gameController.updateCombos();
-    }
-
-    //Update square with an X, O or ''
-    const render = (dataPos, currentSquare) => {
-        if (gameArray[dataPos] === 1) {
-            currentSquare.innerHTML = 'X';
-        } else if (gameArray[dataPos] === 2) {
-            currentSquare.innerHTML = 'O';
+            infoPlayer1.style.backgroundColor = '#FFF731';
+            infoPlayer2.style.backgroundColor = '#DBE7E6';
+            turnPlayer1.innerHTML = 'It\'s your turn!'
+            turnPlayer2.innerHTML = ''
+        } if (currentPlayer === 2) {
+            infoPlayer2.style.backgroundColor = '#FFF731';
+            infoPlayer1.style.backgroundColor = '#DBE7E6';
+            turnPlayer2.innerHTML = 'It\'s your turn!'
+            turnPlayer1.innerHTML = ''
         }
     }
 
-    return { gameArray, startNewGame };
+    return { gameArray, newGame };
 
 })();
 
+//////// GAME LOGIC ////////
+const gameLogic = (() => {
 
-//////// GAME STATE ////////
-const gameController = (() => {
-
-    let square = gameBoard.gameArray;
+    let sq = gameBoard.gameArray;
+    let gameOver = document.getElementById('gameOver');
+    let gameOverMessage = document.getElementById('gameOverMessage');
+    let winsPlayer1 = document.getElementById('winsPlayer1');
+    let winsPlayer2 = document.getElementById('winsPlayer2');
+    let Player1Wins = 0;
+    let Player2Wins = 0;
 
     //winning combos sum function
     const sum = (x, y, z) => {
@@ -79,31 +134,64 @@ const gameController = (() => {
     }
 
     //possible winning combos
-    const updateCombos = () => {
+    const checkForWin = () => {
         let winningCombos = [
-            sum(square[0], square[1], square[2]),
-            sum(square[3], square[4], square[5]),
-            sum(square[6], square[7], square[8]),
-            sum(square[0], square[3], square[6]),
-            sum(square[1], square[4], square[7]),
-            sum(square[2], square[5], square[8]),
-            sum(square[0], square[4], square[8]),
-            sum(square[2], square[4], square[6])
+            sum(sq[0].value, sq[1].value, sq[2].value),
+            sum(sq[3].value, sq[4].value, sq[5].value),
+            sum(sq[6].value, sq[7].value, sq[8].value),
+            sum(sq[0].value, sq[3].value, sq[6].value),
+            sum(sq[1].value, sq[4].value, sq[7].value),
+            sum(sq[2].value, sq[5].value, sq[8].value),
+            sum(sq[0].value, sq[4].value, sq[8].value),
+            sum(sq[2].value, sq[4].value, sq[6].value)
         ];
-        checkForWin(winningCombos);
+        announceWinner(winningCombos);
     }
 
     //check for a 3 (X wins) or a 6 (Y wins)
-    const checkForWin = (winningCombos) => {
+    const announceWinner = (winningCombos) => {
         for (i = 0; i < winningCombos.length; i++) {
-            if (winningCombos[i] === 3) {
-                console.log(`${player1.youWon()}`);
+            if (winningCombos[i] === 3) {;
+                gameOver.style.display = 'block';
+                gameOverMessage.innerHTML = `${Player(player1).youWon()}`
+                Player1Wins += 1;
             } else if (winningCombos[i] === 6) {
-                console.log(`${player2.youWon()}`);
+                gameOver.style.display = 'block';
+                gameOverMessage.innerHTML = `${Player(player2).youWon()}`
+                Player2Wins += 1;
             }
         }
+        checkForTie();
+        updateTotalWins();
     }
 
-    return { updateCombos, square }
+    //if no winner when all squares are marked
+    const checkForTie = () => {
+        let emptySquares = 0;
+        for (i = 0; i < sq.length; i++) {
+            if (!sq[i].marker) {
+                emptySquares ++;
+            }
+        }
+        if (emptySquares === 0 && gameOver.style.display != 'block') {
+            gameOver.style.display = 'block';
+            gameOverMessage.innerHTML = 'Tie game';
+        }
+    };
+
+    const updateTotalWins = () => {
+        winsPlayer1.innerHTML = `Total wins: ${Player1Wins}`; 
+        winsPlayer2.innerHTML = `Total wins: ${Player2Wins}`;
+    }
+    
+    //play again modal
+    const playAgainButton = document.getElementById('playAgain');
+    playAgainButton.addEventListener('click', (e) = () => {
+        gameBoard.newGame();
+        gameOver.style.display = 'none';
+    });
+
+    return { checkForWin }
+
 
 })();
